@@ -3,16 +3,20 @@ import React from 'react';
 // import {Image} from '@rneui/themed';
 import {Image} from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
+import {useNavigation} from '@react-navigation/native';
 
 export const OrderItem = ({order}) => {
+  const navigation = useNavigation();
   return (
-    <Pressable style={styles.container}>
+    <Pressable
+      style={styles.container}
+      onPress={() => navigation.navigate('OrderDelivery', {id: order.id})}>
       <Image source={{uri: order.Restaurant.image}} style={styles.image} />
       <View style={styles.containerText}>
         <Text style={styles.name}>{order.Restaurant.name}</Text>
         <Text style={styles.textGrey}>{order.Restaurant.address}</Text>
 
-        <Text style={{marginTop: 10}}>Détails du livreur</Text>
+        <Text style={{marginTop: 10, color: '#000'}}>Détails du livreur</Text>
         <Text style={styles.textGrey}>nom</Text>
         <Text style={styles.textGrey}>Adresse</Text>
       </View>
@@ -39,7 +43,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
   },
   containerText: {marginLeft: 10, flex: 1, paddingVertical: 5},
-  name: {fontSize: 18, fontWeight: '500'},
+  name: {fontSize: 18, fontWeight: '500', color: '#000'},
   textGrey: {color: 'grey'},
   contaienerIcon: {
     padding: 5,

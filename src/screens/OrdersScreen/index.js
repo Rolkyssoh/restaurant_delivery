@@ -6,7 +6,7 @@ import {CustomMarker} from '../../components/CustomMarker';
 import {OrderItem} from '../../components';
 import orders from '../../../assets/data/orders.json';
 
-export const OrdersCreen = () => {
+export const OrdersScreen = () => {
   const bottomSheetRef = useRef(null);
   const snapPoints = useMemo(() => ['15%', '90%'], []);
 

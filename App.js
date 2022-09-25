@@ -6,21 +6,24 @@
  * @flow strict-local
  */
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
-import {OrderDelivery, OrdersCreen} from './src/screens';
+import {OrderDelivery, OrdersSCreen, ProfileScreen} from './src/screens';
+import EntryNavigation from './src/navigation';
 
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
 
 const App = () => {
   return (
-    <SafeAreaView>
-      <GestureHandlerRootView>
-        {/* <OrdersCreen /> */}
-        <OrderDelivery />
+    <NavigationContainer>
+      <GestureHandlerRootView style={{flex: 1}}>
+        {/* <SafeAreaView> */}
+        <EntryNavigation />
+        {/* </SafeAreaView> */}
       </GestureHandlerRootView>
-    </SafeAreaView>
+    </NavigationContainer>
   );
 };
 

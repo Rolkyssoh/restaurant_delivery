@@ -1,22 +1,52 @@
-import {View, Text, StyleSheet, Dimensions} from 'react-native';
-import React, {useMemo, useRef} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  ActivityIndicator,
+} from 'react-native';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import BottomSheet, {BottomSheetFlatList} from '@gorhom/bottom-sheet';
 import MapView from 'react-native-maps';
 import {CustomMarker} from '../../components/CustomMarker';
 import {OrderItem} from '../../components';
 import orders from '../../../assets/data/orders.json';
+import * as Location from 'expo-location';
 
 export const OrdersScreen = () => {
   const bottomSheetRef = useRef(null);
   const snapPoints = useMemo(() => ['15%', '90%'], []);
 
+  const [driverLocation, setDriverLocation] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      let {status} = await Location.requestForegroundPermissionsAsync();
+      if (!status === 'granted') {
+        console.warn('Nonono');
+        return;
+      }
+      let location = await Location.getCurrentPositionAsync();
+      setDriverLocation({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
+    })();
+  }, []);
+
+  if (!driverLocation) {
+    return <ActivityIndicator size={'large'} color="#000" />;
+  }
+
   return (
     <View style={{backgroundColor: 'lightgrey', height: '100%'}}>
       <MapView
         style={styles.map}
+        showsUserLocation
+        followsUserLocation
         initialRegion={{
-          latitude: 33.9962493,
-          longitude: -6.8487574,
+          latitude: driverLocation.latitude,
+          longitude: driverLocation.longitude,
           latitudeDelta: 0.07,
           longitudeDelta: 0.07,
         }}>

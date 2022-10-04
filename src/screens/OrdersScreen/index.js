@@ -10,14 +10,16 @@ import BottomSheet, {BottomSheetFlatList} from '@gorhom/bottom-sheet';
 import MapView from 'react-native-maps';
 import {CustomMarker} from '../../components/CustomMarker';
 import {OrderItem} from '../../components';
-import orders from '../../../assets/data/orders.json';
 import * as Location from 'expo-location';
+import {DataStore} from 'aws-amplify';
+import {Order} from '../../models';
 
 export const OrdersScreen = () => {
   const bottomSheetRef = useRef(null);
   const snapPoints = useMemo(() => ['15%', '90%'], []);
 
   const [driverLocation, setDriverLocation] = useState(null);
+  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -34,7 +36,24 @@ export const OrdersScreen = () => {
     })();
   }, []);
 
-  if (!driverLocation) {
+  useEffect(() => {
+    fetchOrders();
+
+    const subscription = DataStore.observe(Order).subscribe(msg => {
+      if (msg.opType === 'UPDATE') {
+        fetchOrders();
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const fetchOrders = () => {
+    DataStore.query(Order, order =>
+      order.status('eq', 'READY_FOR_PICKUP'),
+    ).then(setOrders);
+  };
+
+  if (!orders || !driverLocation) {
     return <ActivityIndicator size={'large'} color="#000" />;
   }
 
@@ -50,7 +69,13 @@ export const OrdersScreen = () => {
           latitudeDelta: 0.07,
           longitudeDelta: 0.07,
         }}>
-        <CustomMarker />
+        {orders.map(order => (
+          <CustomMarker
+            key={order.id}
+            data={order.Restaurant}
+            type="RESTAURANT"
+          />
+        ))}
       </MapView>
       <BottomSheet ref={bottomSheetRef} index={1} snapPoints={snapPoints}>
         <View style={{alignItems: 'center', marginBottom: 30}}>

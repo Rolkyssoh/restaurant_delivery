@@ -5,6 +5,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialsIcons from 'react-native-vector-icons/MaterialIcons';
 
 export const CustomMarker = ({data, type}) => {
+  console.log('in custom marker:', data);
   return (
     <Marker
       coordinate={{latitude: data.lat, longitude: data.lng}}

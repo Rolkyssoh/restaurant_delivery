@@ -1,4 +1,4 @@
-import {View, Text, ActivityIndicator, useWindowDimensions} from 'react-native';
+import {View, Text, ActivityIndicator} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import BottomSheetDetails from './BottomSheetDetails';
 import * as Location from 'expo-location';
@@ -9,12 +9,12 @@ import {useRoute} from '@react-navigation/native';
 import MapView from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import {CustomMarker} from '../../components';
-import {DataStore} from 'aws-amplify';
+import {API, DataStore, graphqlOperation} from 'aws-amplify';
 import {Courier} from '../../models';
 import {useAuthContext} from '../../contexts/AuthContext';
+import {updateCourier} from '../../graphql/mutations';
 
 export const OrderDelivery = () => {
-  const {width, height} = useWindowDimensions();
   const mapRef = useRef(null);
   const route = useRoute();
   const {fetchOrder, order, user} = useOrderContext();
@@ -33,12 +33,27 @@ export const OrderDelivery = () => {
     if (!driverLocation) {
       return;
     }
-    DataStore.save(
-      Courier.copyOf(dbCourier, updated => {
-        updated.lat = driverLocation.latitude;
-        updated.lng = driverLocation.longitude;
-      }),
-    );
+
+    try {
+      // DataStore.save(
+      //   Courier.copyOf(dbCourier, updated => {
+      //     updated.lat = driverLocation.latitude;
+      //     updated.lng = driverLocation.longitude;
+      //   }),
+      // );
+      API.graphql(
+        graphqlOperation(updateCourier, {
+          input: {
+            id: dbCourier.id,
+            _version: dbCourier._version,
+            lat: driverLocation.latitude,
+            lng: driverLocation.longitude,
+          },
+        }),
+      );
+    } catch (error) {
+      console.log('error appier when updating curier:', error);
+    }
   }, [driverLocation]);
 
   useEffect(() => {
@@ -54,9 +69,8 @@ export const OrderDelivery = () => {
         longitude: location.coords.longitude,
       });
     })();
-    // const foregroundSubscription =
-    Location.watchPositionAsync(
-      {accuracy: Location.Accuracy.High, distanceInterval: 500},
+    const foregroundSubscription = Location.watchPositionAsync(
+      {accuracy: Location.Accuracy.High, distanceInterval: 100},
       updatedLocation => {
         setDriverLocation({
           latitude: updatedLocation.coords.latitude,
@@ -77,8 +91,8 @@ export const OrderDelivery = () => {
   };
 
   const restaurantLocation = {
-    latitude: order?.Restaurant.lat,
-    longitude: order?.Restaurant.lng,
+    latitude: order?.Structure?.lat,
+    longitude: order?.Structure?.lng,
   };
   const deliveryLocation = {
     latitude: user?.lat,
@@ -95,7 +109,7 @@ export const OrderDelivery = () => {
     <View style={styles.container}>
       <MapView
         ref={mapRef}
-        style={{width, height}}
+        style={styles.map}
         showsUserLocation
         followsUserLocation
         initialRegion={{
@@ -114,14 +128,14 @@ export const OrderDelivery = () => {
           waypoints={
             order.status === 'READY_FOR_PICKUP' ? [restaurantLocation] : []
           }
-          apikey={'AIzaSyDvMek9DrENbEPTg8ADcR2nTqScCna7EVk'}
+          apikey={'AIzaSyBX_6U2S4Adfhg2lVsobZqtHxRNvlgrnn4'}
           onReady={result => {
             setTotalMinutes(result.duration);
             setTotalKm(result.distance);
           }}
         />
         {/* Restaurant marker */}
-        <CustomMarker data={order.Restaurant} type="RESTAURANT" />
+        <CustomMarker data={order.Structure} type="RESTAURANT" />
 
         {/* User marker */}
         <CustomMarker data={user} type="USER" />

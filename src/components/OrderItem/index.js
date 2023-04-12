@@ -1,24 +1,38 @@
 import {View, Text, StyleSheet, Pressable} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 // import {Image} from '@rneui/themed';
 import {Image} from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {useNavigation} from '@react-navigation/native';
+import {API, graphqlOperation} from 'aws-amplify';
+import {getUser, listUsers} from '../../graphql/queries';
 
 export const OrderItem = ({order}) => {
   const navigation = useNavigation();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    API.graphql(graphqlOperation(getUser, {id: order.userID})).then(result => {
+      console.log('the user order:', result);
+      setUser(result.data.getUser);
+    });
+    // API.graphql(graphqlOperation(listUsers)).then(result =>
+    //   console.log('list all the users:', result),
+    // );
+  }, []);
+
   return (
     <Pressable
       style={styles.container}
       onPress={() => navigation.navigate('OrderDelivery', {id: order.id})}>
-      <Image source={{uri: order.Restaurant.image}} style={styles.image} />
+      <Image source={{uri: order.Structure.image}} style={styles.image} />
       <View style={styles.containerText}>
-        <Text style={styles.name}>{order.Restaurant.name}</Text>
-        <Text style={styles.textGrey}>{order.Restaurant.address}</Text>
+        <Text style={styles.name}>{order.Structure.name}</Text>
+        <Text style={styles.textGrey}>{order.Structure.address}</Text>
 
-        <Text style={{marginTop: 10, color: '#000'}}>Détails du livreur</Text>
-        <Text style={styles.textGrey}>nom</Text>
-        <Text style={styles.textGrey}>Adresse</Text>
+        <Text style={{marginTop: 10, color: '#000'}}>Détails du client</Text>
+        <Text style={styles.textGrey}>{user?.name}</Text>
+        <Text style={styles.textGrey}>{user?.address}</Text>
       </View>
       <View style={styles.contaienerIcon}>
         <Entypo name="check" size={30} color="#fff" />

@@ -11,7 +11,7 @@ import {useOrderContext} from '../../contexts/OrderContext';
 const STATUS_TO_TITLE = {
   READY_FOR_PICKUP: 'Accept Order',
   ACCEPTED: 'Pick-up order',
-  PICKUD_UP: 'Complete Delivery',
+  PICKED_UP: 'Complete Delivery',
 };
 
 const BottomSheetDetails = props => {
@@ -20,6 +20,8 @@ const BottomSheetDetails = props => {
   const {totalKm, totalMinutes, onAccepted} = props;
   const bottomSheetRef = useRef(null);
   const navigation = useNavigation();
+
+  console.log('le order dans bottom sheet detail:', order);
 
   const isDriverClose = totalKm <= 1;
 
@@ -33,6 +35,9 @@ const BottomSheetDetails = props => {
     } else if (order.status === 'ACCEPTED') {
       bottomSheetRef.current?.collapse();
       await pickUpOrder();
+    } else if (order.status === 'PICKED_UP') {
+      bottomSheetRef.current?.collapse();
+      await completeOrder();
       navigation.goBack();
     }
   };
@@ -44,7 +49,7 @@ const BottomSheetDetails = props => {
     if (order.status === 'ACCEPTED' && isDriverClose) {
       return false;
     }
-    if (order.status === 'PICKUD_UP' && isDriverClose) {
+    if (order.status === 'PICKED_UP' && isDriverClose) {
       return false;
     }
     return true;
@@ -69,10 +74,10 @@ const BottomSheetDetails = props => {
         <Text style={styles.routeDetailsText}>{totalKm.toFixed(2)} km</Text>
       </View>
       <View style={styles.deliveryDetailsContainer}>
-        <Text style={styles.restaurantName}>{order.Restaurant.name}</Text>
+        <Text style={styles.restaurantName}>{order?.Structure.name}</Text>
         <View style={styles.addressContainer}>
           <Fontisto name="shopping-store" size={22} color="grey" />
-          <Text style={styles.addressText}>{order.Restaurant.address}</Text>
+          <Text style={styles.addressText}>{order?.Structure.address}</Text>
         </View>
         <View style={styles.addressContainer}>
           <Fontisto name="map-marker-alt" size={30} color="grey" />

@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
   container: {backgroundColor: 'lightblue', height: '100%'},
@@ -55,4 +55,9 @@ export default StyleSheet.create({
     borderRadius: 10,
   },
   buttonStyle: {},
+  map: {
+    width: Dimensions.get('screen').width,
+    height: Dimensions.get('screen').height,
+    // zIndex: 1,
+  },
 });

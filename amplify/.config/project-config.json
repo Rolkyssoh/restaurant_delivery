@@ -2,7 +2,7 @@
   "providers": [
     "awscloudformation"
   ],
-  "projectName": "UberEats",
+  "projectName": "LaTchop10",
   "version": "3.1",
   "frontend": "javascript",
   "javascript": {

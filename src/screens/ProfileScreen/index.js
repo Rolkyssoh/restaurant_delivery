@@ -1,19 +1,75 @@
-import {View, Text, StyleSheet, Pressable} from 'react-native';
+import {View, Text, StyleSheet, Pressable, Alert} from 'react-native';
 import React, {useState} from 'react';
 // import { TransportationMode } from ''
 import {Button, Input} from '@rneui/themed';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {useAuthContext} from '../../contexts/AuthContext';
+import {API, Auth, graphqlOperation} from 'aws-amplify';
+import {createCourier, updateCourier} from '../../graphql/mutations';
+import {TransportationModes} from '../../models';
+import {useNavigation} from '@react-navigation/native';
 
 export const ProfileScreen = () => {
-  const [transportationMode, setTransportationMode] = useState('DRIVING');
+  const navigation = useNavigation();
+  const {sub, dbCourier, setDbCourier} = useAuthContext();
+  const [transportationMode, setTransportationMode] = useState(
+    TransportationModes.DRIVING,
+  );
+  const [name, setName] = useState(dbCourier?.name || '');
 
-  const onSave = async () => {};
+  const onSave = async () => {
+    if (dbCourier) {
+      await editExitedCourier();
+    } else {
+      await addNewCourier();
+    }
+  };
+
+  const addNewCourier = async () => {
+    try {
+      const courier = await API.graphql(
+        graphqlOperation(createCourier, {
+          input: {
+            name,
+            lat: 0,
+            lng: 0,
+            sub,
+            tranportationMode: transportationMode,
+          },
+        }),
+      );
+      console.log('the new courier:', courier);
+      setDbCourier(courier.data.createCourier);
+    } catch (error) {
+      Alert.alert('Error', error.message);
+    }
+  };
+  const editExitedCourier = async () => {
+    const updatedCourier = await API.graphql(
+      graphqlOperation(updateCourier, {
+        input: {
+          _version: dbCourier._version,
+          id: dbCourier.id,
+          name,
+          tranportationMode: transportationMode,
+        },
+      }),
+    );
+    console.log('the updated courier:', updatedCourier);
+    setDbCourier(updateCourier.data.updateCourier);
+    navigation.goBack();
+  };
 
   return (
     <View style={{backgroundColor: '#fff', height: '100%'}}>
       <Text style={styles.title}>Profile</Text>
-      <Input placeholder="Nom" style={styles.input} />
+      <Input
+        placeholder="Nom"
+        style={styles.input}
+        value={name}
+        onChangeText={setName}
+      />
       <View style={{flexDirection: 'row'}}>
         <Pressable
           onPress={() => setTransportationMode('BICYCLING')}
@@ -36,7 +92,12 @@ export const ProfileScreen = () => {
       </View>
 
       <Button title="Engregister" buttonStyle={{margin: 10}} onPress={onSave} />
-      <Button title="Décnnexion" type="clear" titleStyle={{color: 'red'}} />
+      <Button
+        title="Décnnexion"
+        type="clear"
+        titleStyle={{color: 'red'}}
+        onPress={() => Auth.signOut()}
+      />
     </View>
   );
 };

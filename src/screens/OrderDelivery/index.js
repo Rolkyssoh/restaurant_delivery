@@ -99,6 +99,12 @@ export const OrderDelivery = () => {
     longitude: user?.lng,
   };
 
+  useEffect(() => {
+    console.log('location', driverLocation);
+    console.log('orderrrrrrr', order);
+    console.log('userrrrr', user);
+  }, []);
+
   if (!driverLocation || !order || !user) {
     return (
       <ActivityIndicator size={'large'} style={{marginTop: 50}} color="#000" />
@@ -128,7 +134,7 @@ export const OrderDelivery = () => {
           waypoints={
             order.status === 'READY_FOR_PICKUP' ? [restaurantLocation] : []
           }
-          apikey={'AIzaSyBX_6U2S4Adfhg2lVsobZqtHxRNvlgrnn4'}
+          apikey={'AIzaSyA3YCkMqzRrvIYkXJdZXX4TvfKbEX21Q48'}
           onReady={result => {
             setTotalMinutes(result.duration);
             setTotalKm(result.distance);

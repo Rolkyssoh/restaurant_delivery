@@ -1,4 +1,4 @@
-import {View, Text, ActivityIndicator} from 'react-native';
+import {View, ActivityIndicator} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import BottomSheetDetails from './BottomSheetDetails';
 import * as Location from 'expo-location';
@@ -9,10 +9,11 @@ import {useRoute} from '@react-navigation/native';
 import MapView from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import {CustomMarker} from '../../components';
-import {API, DataStore, graphqlOperation} from 'aws-amplify';
-import {Courier} from '../../models';
+import {API, graphqlOperation} from 'aws-amplify';
 import {useAuthContext} from '../../contexts/AuthContext';
 import {updateCourier} from '../../graphql/mutations';
+
+import {GOOGLE_MAPS_APIKEY} from '@env';
 
 export const OrderDelivery = () => {
   const mapRef = useRef(null);
@@ -35,12 +36,6 @@ export const OrderDelivery = () => {
     }
 
     try {
-      // DataStore.save(
-      //   Courier.copyOf(dbCourier, updated => {
-      //     updated.lat = driverLocation.latitude;
-      //     updated.lng = driverLocation.longitude;
-      //   }),
-      // );
       API.graphql(
         graphqlOperation(updateCourier, {
           input: {
@@ -99,12 +94,6 @@ export const OrderDelivery = () => {
     longitude: user?.lng,
   };
 
-  useEffect(() => {
-    console.log('location', driverLocation);
-    console.log('orderrrrrrr', order);
-    console.log('userrrrr', user);
-  }, []);
-
   if (!driverLocation || !order || !user) {
     return (
       <ActivityIndicator size={'large'} style={{marginTop: 50}} color="#000" />
@@ -134,7 +123,7 @@ export const OrderDelivery = () => {
           waypoints={
             order.status === 'READY_FOR_PICKUP' ? [restaurantLocation] : []
           }
-          apikey={'AIzaSyA3YCkMqzRrvIYkXJdZXX4TvfKbEX21Q48'}
+          apikey={GOOGLE_MAPS_APIKEY}
           onReady={result => {
             setTotalMinutes(result.duration);
             setTotalKm(result.distance);

@@ -26,17 +26,6 @@ export const OrderItem = ({order}) => {
   const s3 = new AWS.S3();
 
   useEffect(() => {
-    console.log('le premier order lorsque on entre:', order.userID);
-    API.graphql(graphqlOperation(getUser, {id: order.userID})).then(result => {
-      console.log('the user order:', result);
-      // setUser(result.data.getUser);
-    });
-    // API.graphql(graphqlOperation(listUsers)).then(result =>
-    //   console.log('list all the users:', result),
-    // );
-  }, []);
-
-  useEffect(() => {
     console.log('le order dans order item:', order);
     if (order.Structure) {
       const params = {
@@ -51,7 +40,20 @@ export const OrderItem = ({order}) => {
         }
       });
     }
+
+    getUserByOrderId(order.userID)
   }, [order]);
+
+  const getUserByOrderId = (user_id) => {
+    API.graphql(graphqlOperation(getUser, {id: user_id})).then(result => {
+      console.log('the user order:', result);
+      setUser(result.data.getUser);
+    });
+  }
+
+  if(!user){
+    return null
+  }
 
   return (
     <Pressable

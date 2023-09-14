@@ -12,7 +12,7 @@ import {useNavigation} from '@react-navigation/native';
 
 export const ProfileScreen = () => {
   const navigation = useNavigation();
-  const {sub, dbCourier, setDbCourier} = useAuthContext();
+  const {sub, dbCourier, setDbCourier, authUser} = useAuthContext();
   const [transportationMode, setTransportationMode] = useState(
     TransportationModes.DRIVING,
   );
@@ -36,6 +36,7 @@ export const ProfileScreen = () => {
             lng: 0,
             sub,
             tranportationMode: transportationMode,
+            // email: authUser?.attributes?.email
           },
         }),
       );
@@ -53,6 +54,7 @@ export const ProfileScreen = () => {
           id: dbCourier.id,
           name,
           tranportationMode: transportationMode,
+          // email: authUser?.attributes?.email
         },
       }),
     );

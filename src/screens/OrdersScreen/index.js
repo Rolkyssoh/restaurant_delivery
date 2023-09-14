@@ -64,6 +64,7 @@ export const OrdersScreen = () => {
   };
 
   if (!orders || !driverLocation) {
+    console.log('the roderrr::::', orders)
     return <ActivityIndicator size={'large'} color="#000" />;
   }
   console.log({orders});

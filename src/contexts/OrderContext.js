@@ -54,15 +54,6 @@ const OrderContextProvider = ({children}) => {
       return;
     }
 
-    // const subscription = DataStore.observe(Order, order.id).subscribe(
-    //   ({opType, element}) => {
-    //     if (opType === 'UPDATE') {
-    //       fetchOrder(element.id);
-    //       setOrder(element);
-    //     }
-    //   },
-    // );
-
     const subscription = API.graphql(
       graphqlOperation(onCreateOrder, {
         filter: {id: {eq: order.id}},

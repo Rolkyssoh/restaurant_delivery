@@ -26,7 +26,6 @@ export const OrderItem = ({order}) => {
   const s3 = new AWS.S3();
 
   useEffect(() => {
-    console.log('le order dans order item:', order);
     if (order.Structure) {
       const params = {
         Bucket: S3_BUCKET,
@@ -46,7 +45,6 @@ export const OrderItem = ({order}) => {
 
   const getUserByOrderId = (user_id) => {
     API.graphql(graphqlOperation(getUser, {id: user_id})).then(result => {
-      console.log('the user order:', result);
       setUser(result.data.getUser);
     });
   }

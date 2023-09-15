@@ -36,7 +36,7 @@ export const ProfileScreen = () => {
             lng: 0,
             sub,
             tranportationMode: transportationMode,
-            // email: authUser?.attributes?.email
+            email: authUser?.attributes?.email
           },
         }),
       );
@@ -47,19 +47,20 @@ export const ProfileScreen = () => {
     }
   };
   const editExitedCourier = async () => {
-    const updatedCourier = await API.graphql(
-      graphqlOperation(updateCourier, {
-        input: {
-          _version: dbCourier._version,
-          id: dbCourier.id,
-          name,
-          tranportationMode: transportationMode,
-          // email: authUser?.attributes?.email
-        },
-      }),
-    );
-    console.log('the updated courier:', updatedCourier);
-    setDbCourier(updateCourier.data.updateCourier);
+    if(name != dbCourier.name){
+      const updatedCourier = await API.graphql(
+        graphqlOperation(updateCourier, {
+          input: {
+            _version: dbCourier._version,
+            id: dbCourier.id,
+            name,
+            tranportationMode: transportationMode,
+            email: dbCourier.email==='' && authUser?.attributes?.email
+          },
+        }),
+      );
+      console.log('the updated courier:', updatedCourier.data.updateCourier);
+    }
     navigation.goBack();
   };
 
@@ -94,6 +95,12 @@ export const ProfileScreen = () => {
       </View>
 
       <Button title="Engregister" buttonStyle={{margin: 10}} onPress={onSave} />
+      {/* <Button
+        title="Retouner"
+        type="clear"
+        titleStyle={{color: 'grey'}}
+        onPress={() => navigation.goBack()}
+      /> */}
       <Button
         title="Décnnexion"
         type="clear"

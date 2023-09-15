@@ -41,7 +41,8 @@ const AuthContextProvider = ({children}) => {
       }),
     ).subscribe({
       next: ({value}) => {
-        console.log('on update courier:', value);
+        console.log('on update courier:', value.data);
+        setDbCourier(value.data.onUpdateCourier)
       },
       error: err => {
         console.warn(err);

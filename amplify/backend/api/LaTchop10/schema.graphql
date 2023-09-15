@@ -10,6 +10,7 @@ type Courier @model @auth(rules: [{allow: public}]) {
   lat: Float!
   lng: Float!
   tranportationMode: TransportationModes!
+  email: String
 }
 
 type OrderDish @model @auth(rules: [{allow: public}]) {
@@ -56,6 +57,7 @@ type User @model @auth(rules: [{allow: public}]) {
   type: UserType!
   Baskets: [Basket] @hasMany(indexName: "byUser", fields: ["id"])
   Orders: [Order] @hasMany(indexName: "byUser", fields: ["id"])
+  email: String
 }
 
 type BasketDish @model @auth(rules: [{allow: public}]) {

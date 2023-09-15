@@ -10,11 +10,13 @@ export const getCourier = /* GraphQL */ `
       lat
       lng
       tranportationMode
+      email
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
+      __typename
     }
   }
 `;
@@ -32,14 +34,17 @@ export const listCouriers = /* GraphQL */ `
         lat
         lng
         tranportationMode
+        email
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -63,14 +68,17 @@ export const syncCouriers = /* GraphQL */ `
         lat
         lng
         tranportationMode
+        email
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -91,6 +99,7 @@ export const getOrderDish = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       Ingredient {
         id
@@ -104,6 +113,7 @@ export const getOrderDish = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       orderID
       createdAt
@@ -113,6 +123,7 @@ export const getOrderDish = /* GraphQL */ `
       _lastChangedAt
       orderDishDishId
       orderDishIngredientId
+      __typename
     }
   }
 `;
@@ -138,6 +149,7 @@ export const listOrderDishes = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         Ingredient {
           id
@@ -151,6 +163,7 @@ export const listOrderDishes = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         orderID
         createdAt
@@ -160,9 +173,11 @@ export const listOrderDishes = /* GraphQL */ `
         _lastChangedAt
         orderDishDishId
         orderDishIngredientId
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -194,6 +209,7 @@ export const syncOrderDishes = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         Ingredient {
           id
@@ -207,6 +223,7 @@ export const syncOrderDishes = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         orderID
         createdAt
@@ -216,9 +233,11 @@ export const syncOrderDishes = /* GraphQL */ `
         _lastChangedAt
         orderDishDishId
         orderDishIngredientId
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -252,6 +271,7 @@ export const orderDishesByOrderID = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         Ingredient {
           id
@@ -265,6 +285,7 @@ export const orderDishesByOrderID = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         orderID
         createdAt
@@ -274,9 +295,11 @@ export const orderDishesByOrderID = /* GraphQL */ `
         _lastChangedAt
         orderDishDishId
         orderDishIngredientId
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -303,20 +326,24 @@ export const getOrder = /* GraphQL */ `
         Dishes {
           nextToken
           startedAt
+          __typename
         }
         Ingredients {
           nextToken
           startedAt
+          __typename
         }
         Baskets {
           nextToken
           startedAt
+          __typename
         }
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       OrderDishes {
         items {
@@ -330,9 +357,11 @@ export const getOrder = /* GraphQL */ `
           _lastChangedAt
           orderDishDishId
           orderDishIngredientId
+          __typename
         }
         nextToken
         startedAt
+        __typename
       }
       Courier {
         id
@@ -341,11 +370,13 @@ export const getOrder = /* GraphQL */ `
         lat
         lng
         tranportationMode
+        email
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       createdAt
       updatedAt
@@ -354,6 +385,7 @@ export const getOrder = /* GraphQL */ `
       _lastChangedAt
       orderStructureId
       orderCourierId
+      __typename
     }
   }
 `;
@@ -387,10 +419,12 @@ export const listOrders = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         OrderDishes {
           nextToken
           startedAt
+          __typename
         }
         Courier {
           id
@@ -399,11 +433,13 @@ export const listOrders = /* GraphQL */ `
           lat
           lng
           tranportationMode
+          email
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         createdAt
         updatedAt
@@ -412,9 +448,11 @@ export const listOrders = /* GraphQL */ `
         _lastChangedAt
         orderStructureId
         orderCourierId
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -454,10 +492,12 @@ export const syncOrders = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         OrderDishes {
           nextToken
           startedAt
+          __typename
         }
         Courier {
           id
@@ -466,11 +506,13 @@ export const syncOrders = /* GraphQL */ `
           lat
           lng
           tranportationMode
+          email
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         createdAt
         updatedAt
@@ -479,9 +521,11 @@ export const syncOrders = /* GraphQL */ `
         _lastChangedAt
         orderStructureId
         orderCourierId
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -523,10 +567,12 @@ export const ordersByUserID = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         OrderDishes {
           nextToken
           startedAt
+          __typename
         }
         Courier {
           id
@@ -535,11 +581,13 @@ export const ordersByUserID = /* GraphQL */ `
           lat
           lng
           tranportationMode
+          email
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         createdAt
         updatedAt
@@ -548,9 +596,11 @@ export const ordersByUserID = /* GraphQL */ `
         _lastChangedAt
         orderStructureId
         orderCourierId
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -574,9 +624,11 @@ export const getUser = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         nextToken
         startedAt
+        __typename
       }
       Orders {
         items {
@@ -590,15 +642,19 @@ export const getUser = /* GraphQL */ `
           _lastChangedAt
           orderStructureId
           orderCourierId
+          __typename
         }
         nextToken
         startedAt
+        __typename
       }
+      email
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
+      __typename
     }
   }
 `;
@@ -620,19 +676,24 @@ export const listUsers = /* GraphQL */ `
         Baskets {
           nextToken
           startedAt
+          __typename
         }
         Orders {
           nextToken
           startedAt
+          __typename
         }
+        email
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -660,19 +721,24 @@ export const syncUsers = /* GraphQL */ `
         Baskets {
           nextToken
           startedAt
+          __typename
         }
         Orders {
           nextToken
           startedAt
+          __typename
         }
+        email
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -694,6 +760,7 @@ export const getBasketDish = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       Ingredient {
         id
@@ -707,6 +774,7 @@ export const getBasketDish = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       createdAt
       updatedAt
@@ -715,6 +783,7 @@ export const getBasketDish = /* GraphQL */ `
       _lastChangedAt
       basketDishDishId
       basketDishIngredientId
+      __typename
     }
   }
 `;
@@ -741,6 +810,7 @@ export const listBasketDishes = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         Ingredient {
           id
@@ -754,6 +824,7 @@ export const listBasketDishes = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         createdAt
         updatedAt
@@ -762,9 +833,11 @@ export const listBasketDishes = /* GraphQL */ `
         _lastChangedAt
         basketDishDishId
         basketDishIngredientId
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -797,6 +870,7 @@ export const syncBasketDishes = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         Ingredient {
           id
@@ -810,6 +884,7 @@ export const syncBasketDishes = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         createdAt
         updatedAt
@@ -818,9 +893,11 @@ export const syncBasketDishes = /* GraphQL */ `
         _lastChangedAt
         basketDishDishId
         basketDishIngredientId
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -855,6 +932,7 @@ export const basketDishesByBasketID = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         Ingredient {
           id
@@ -868,6 +946,7 @@ export const basketDishesByBasketID = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         createdAt
         updatedAt
@@ -876,9 +955,11 @@ export const basketDishesByBasketID = /* GraphQL */ `
         _lastChangedAt
         basketDishDishId
         basketDishIngredientId
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -899,9 +980,11 @@ export const getBasket = /* GraphQL */ `
           _lastChangedAt
           basketDishDishId
           basketDishIngredientId
+          __typename
         }
         nextToken
         startedAt
+        __typename
       }
       userID
       createdAt
@@ -909,6 +992,7 @@ export const getBasket = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      __typename
     }
   }
 `;
@@ -925,6 +1009,7 @@ export const listBaskets = /* GraphQL */ `
         BasketDishes {
           nextToken
           startedAt
+          __typename
         }
         userID
         createdAt
@@ -932,9 +1017,11 @@ export const listBaskets = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -957,6 +1044,7 @@ export const syncBaskets = /* GraphQL */ `
         BasketDishes {
           nextToken
           startedAt
+          __typename
         }
         userID
         createdAt
@@ -964,9 +1052,11 @@ export const syncBaskets = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -991,6 +1081,7 @@ export const basketsByStructureID = /* GraphQL */ `
         BasketDishes {
           nextToken
           startedAt
+          __typename
         }
         userID
         createdAt
@@ -998,9 +1089,11 @@ export const basketsByStructureID = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -1025,6 +1118,7 @@ export const basketsByUserID = /* GraphQL */ `
         BasketDishes {
           nextToken
           startedAt
+          __typename
         }
         userID
         createdAt
@@ -1032,9 +1126,11 @@ export const basketsByUserID = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -1052,6 +1148,7 @@ export const getIngredient = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      __typename
     }
   }
 `;
@@ -1074,9 +1171,11 @@ export const listIngredients = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -1105,9 +1204,11 @@ export const syncIngredients = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -1138,9 +1239,11 @@ export const ingredientsByStructureID = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -1158,6 +1261,7 @@ export const getDish = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      __typename
     }
   }
 `;
@@ -1180,9 +1284,11 @@ export const listDishes = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -1211,9 +1317,11 @@ export const syncDishes = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -1244,9 +1352,11 @@ export const dishesByStructureID = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -1279,9 +1389,11 @@ export const getStructure = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         nextToken
         startedAt
+        __typename
       }
       Ingredients {
         items {
@@ -1296,9 +1408,11 @@ export const getStructure = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         nextToken
         startedAt
+        __typename
       }
       Baskets {
         items {
@@ -1310,15 +1424,18 @@ export const getStructure = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         nextToken
         startedAt
+        __typename
       }
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
+      __typename
     }
   }
 `;
@@ -1346,23 +1463,28 @@ export const listStructures = /* GraphQL */ `
         Dishes {
           nextToken
           startedAt
+          __typename
         }
         Ingredients {
           nextToken
           startedAt
+          __typename
         }
         Baskets {
           nextToken
           startedAt
+          __typename
         }
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -1396,23 +1518,28 @@ export const syncStructures = /* GraphQL */ `
         Dishes {
           nextToken
           startedAt
+          __typename
         }
         Ingredients {
           nextToken
           startedAt
+          __typename
         }
         Baskets {
           nextToken
           startedAt
+          __typename
         }
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;

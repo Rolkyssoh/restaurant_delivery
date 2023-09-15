@@ -55,7 +55,7 @@ export const ProfileScreen = () => {
             id: dbCourier.id,
             name,
             tranportationMode: transportationMode,
-            email: dbCourier.email==='' && authUser?.attributes?.email
+            email: authUser?.attributes?.email 
           },
         }),
       );

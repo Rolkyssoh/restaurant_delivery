@@ -1,8 +1,7 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {ActivityIndicator} from 'react-native';
 import {useAuthContext} from '../contexts/AuthContext';
-import {OrderDelivery, OrdersScreen, ProfileScreen} from '../screens';
-import { UserAccountScreen } from '../screens/UserAccountScreen';
+import {MissionScreen, OrderDelivery, OrdersScreen, ProfileScreen, UserAccountScreen} from '../screens';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +27,7 @@ const EntryNavigation = () => {
       <Stack.Screen name="OrderDelivery" component={OrderDelivery} />
       <Stack.Screen name="Profile" component={ProfileScreen} />
       <Stack.Screen name="UserAccount" component={UserAccountScreen} options={{ title:'' }} />
+      <Stack.Screen name="Mission" component={MissionScreen} />
         {/* </>
       ) : (
         <Stack.Screen name="Profile" component={ProfileScreen} />

@@ -5,10 +5,12 @@ import {
   getOrderDish,
   getUser,
   listOrderDishes,
+  listOrders,
 } from '../graphql/queries';
 import {onCreateOrder} from '../graphql/subscriptions';
-import {Order, OrderDish, User} from '../models';
+import {Order, OrderStatus} from '../models';
 import {useAuthContext} from './AuthContext';
+import { updateOrder } from '../graphql/mutations';
 
 const OrderContext = createContext({});
 
@@ -18,6 +20,18 @@ const OrderContextProvider = ({children}) => {
   const [order, setOrder] = useState();
   const [user, setUser] = useState();
   const [dishes, setDishes] = useState();
+  const [courierHisOrders, setCourierHisOrders] = useState();
+
+  useEffect(() => {
+    fetchOrders()
+  },[])
+
+  const fetchOrders = async () => {
+    API.graphql(graphqlOperation(listOrders)).then((o) => {
+      console.log('the all ordersss::::', o.data.listOrders.items.filter(_ => _.status ==="COMPLETED" && _.Courier !=null));
+      setCourierHisOrders( o.data.listOrders.items.filter(_ => _.status ==="COMPLETED"))
+    })
+  }
 
   const fetchOrder = async id => {
     if (!id) {
@@ -69,24 +83,50 @@ const OrderContextProvider = ({children}) => {
     return () => subscription.unsubscribe();
   }, [order?.id]);
 
-  const acceptOrder = async () => {
-    // update the order, and change status, and assign the driver
-    const acceptedOrder = await DataStore.save(
-      Order.copyOf(order, updated => {
-        updated.status = 'ACCEPTED';
-        updated.Courier = dbCourier;
-      }),
+  const cancelAcceptedOrder = async () => {
+    const acceptedOrder = await API.graphql(
+        graphqlOperation(updateOrder, {
+            input: {
+                status: OrderStatus.READY_FOR_PICKUP,
+                courierID: dbCourier.id,
+                id: order.id,
+                _version: order._version,
+            },
+        })
     );
-    setOrder(acceptedOrder);
+    setOrder(acceptedOrder.data.updateOrder);
+  };
+
+  const acceptOrder = async () => {
+    const acceptedOrder = await API.graphql(
+        graphqlOperation(updateOrder, {
+            input: {
+                status: OrderStatus.ACCEPTED,
+                courierID: dbCourier.id,
+                id: order.id,
+                _version: order._version,
+            },
+        })
+    );
+    setOrder(acceptedOrder.data.updateOrder);
   };
 
   const pickUpOrder = async () => {
-    const updatedOrder = await DataStore.save(
-      Order.copyOf(order, updated => {
-        updated.status = 'PICKED_UP';
-      }),
+    // const updatedOrder = await DataStore.save(
+    //   Order.copyOf(order, updated => {
+    //     updated.status = 'PICKED_UP';
+    //   }),
+    // );
+    const updatedOrder = await API.graphql(
+        graphqlOperation(updateOrder, {
+            input: {
+                status: OrderStatus.PICKED_UP,
+                id: order.id,
+                _version: order._version,
+            },
+        })
     );
-    setOrder(updatedOrder);
+    setOrder(updatedOrder.data.updateOrder);
   };
 
   const completeOrder = async () => {
@@ -102,10 +142,12 @@ const OrderContextProvider = ({children}) => {
     <OrderContext.Provider
       value={{
         acceptOrder,
+        cancelAcceptedOrder,
         order,
         user,
         dishes,
         fetchOrder,
+        courierHisOrders,
         pickUpOrder,
         completeOrder,
       }}>

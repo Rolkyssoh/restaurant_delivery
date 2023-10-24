@@ -14,6 +14,8 @@ import {useAuthContext} from '../../contexts/AuthContext';
 import {updateCourier} from '../../graphql/mutations';
 
 import {GOOGLE_MAPS_APIKEY} from '@env';
+import { getStructure } from '../../graphql/queries';
+import { OrderStatus } from '../../models';
 
 export const OrderDelivery = () => {
   const mapRef = useRef(null);
@@ -25,10 +27,15 @@ export const OrderDelivery = () => {
   const [driverLocation, setDriverLocation] = useState(null);
   const [totalMinutes, setTotalMinutes] = useState(0);
   const [totalKm, setTotalKm] = useState(0);
+  const [structure, setStructure] = useState(null);
 
   useEffect(() => {
     fetchOrder(id);
   }, [id]);
+  useEffect(() => {
+    if(order)
+    getStructureByOrderId(order.structureID)
+  }, [order]);
 
   useEffect(() => {
     if (!driverLocation) {
@@ -76,18 +83,24 @@ export const OrderDelivery = () => {
     // return foregroundSubscription;
   }, []);
 
+  const getStructureByOrderId = (struct_id) => {
+    API.graphql(graphqlOperation(getStructure, {id: struct_id})).then(result => {
+      setStructure(result.data.getStructure);
+    });
+  }
+
   const zoomInOnDriver = () => {
     mapRef.current.animateToRegion({
       latitude: driverLocation.latitude,
       longitude: driverLocation.longitude,
-      latitudeDelta: 0.01,
-      longitudeDelta: 0.01,
+      latitudeDelta: order.status === OrderStatus.ACCEPTED ? 0.01 : 0.07,
+      longitudeDelta: order.status === OrderStatus.ACCEPTED ? 0.01 : 0.07,
     });
   };
 
   const restaurantLocation = {
-    latitude: order?.Structure?.lat,
-    longitude: order?.Structure?.lng,
+    latitude:  structure != null ? structure?.lat : 0,
+    longitude: structure != null ?  structure?.lng : 0,
   };
   const deliveryLocation = {
     latitude: user?.lat,
@@ -130,7 +143,7 @@ export const OrderDelivery = () => {
           }}
         />
         {/* Restaurant marker */}
-        <CustomMarker data={order.Structure} type="RESTAURANT" />
+        <CustomMarker data={order} type="RESTAURANT" />
 
         {/* User marker */}
         <CustomMarker data={user} type="USER" />

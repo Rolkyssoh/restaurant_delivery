@@ -6,11 +6,14 @@ enum TransportationModes {
 type Courier @model @auth(rules: [{allow: public}]) {
   id: ID!
   name: String!
-  sub: String!
+  address: String
   lat: Float!
   lng: Float!
   tranportationMode: TransportationModes!
   email: String
+  Orders: [Order] @hasMany(indexName: "byCourier", fields: ["id"])
+  isActive: Boolean
+  sub: String!
 }
 
 type OrderDish @model @auth(rules: [{allow: public}]) {
@@ -35,9 +38,9 @@ type Order @model @auth(rules: [{allow: public}]) {
   id: ID!
   status: OrderStatus!
   userID: ID! @index(name: "byUser")
-  Structure: Structure @hasOne
   OrderDishes: [OrderDish] @hasMany(indexName: "byOrder", fields: ["id"])
-  Courier: Courier @hasOne
+  structureID: ID @index(name: "byStructure")
+  courierID: ID @index(name: "byCourier")
 }
 
 enum UserType {
@@ -58,6 +61,7 @@ type User @model @auth(rules: [{allow: public}]) {
   Baskets: [Basket] @hasMany(indexName: "byUser", fields: ["id"])
   Orders: [Order] @hasMany(indexName: "byUser", fields: ["id"])
   email: String
+  isActive: Boolean
 }
 
 type BasketDish @model @auth(rules: [{allow: public}]) {
@@ -115,5 +119,6 @@ type Structure @model @auth(rules: [{allow: public}]) {
   Dishes: [Dish] @hasMany(indexName: "byStructure", fields: ["id"])
   Ingredients: [Ingredient] @hasMany(indexName: "byStructure", fields: ["id"])
   Baskets: [Basket] @hasMany(indexName: "byStructure", fields: ["id"])
+  Orders: [Order] @hasMany(indexName: "byStructure", fields: ["id"])
 }
  

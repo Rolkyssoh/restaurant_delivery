@@ -1,6 +1,6 @@
 import { ModelInit, MutableModel, __modelMeta__, ManagedIdentifier } from "@aws-amplify/datastore";
 // @ts-ignore
-import { LazyLoading, LazyLoadingDisabled, AsyncItem, AsyncCollection } from "@aws-amplify/datastore";
+import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@aws-amplify/datastore";
 
 export enum TransportationModes {
   DRIVING = "DRIVING",
@@ -38,11 +38,14 @@ type EagerCourier = {
   };
   readonly id: string;
   readonly name: string;
-  readonly sub: string;
+  readonly address?: string | null;
   readonly lat: number;
   readonly lng: number;
   readonly tranportationMode: TransportationModes | keyof typeof TransportationModes;
   readonly email?: string | null;
+  readonly Orders?: (Order | null)[] | null;
+  readonly isActive?: boolean | null;
+  readonly sub: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -54,11 +57,14 @@ type LazyCourier = {
   };
   readonly id: string;
   readonly name: string;
-  readonly sub: string;
+  readonly address?: string | null;
   readonly lat: number;
   readonly lng: number;
   readonly tranportationMode: TransportationModes | keyof typeof TransportationModes;
   readonly email?: string | null;
+  readonly Orders: AsyncCollection<Order>;
+  readonly isActive?: boolean | null;
+  readonly sub: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -115,13 +121,11 @@ type EagerOrder = {
   readonly id: string;
   readonly status: OrderStatus | keyof typeof OrderStatus;
   readonly userID: string;
-  readonly Structure?: Structure | null;
   readonly OrderDishes?: (OrderDish | null)[] | null;
-  readonly Courier?: Courier | null;
+  readonly structureID?: string | null;
+  readonly courierID?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-  readonly orderStructureId?: string | null;
-  readonly orderCourierId?: string | null;
 }
 
 type LazyOrder = {
@@ -132,13 +136,11 @@ type LazyOrder = {
   readonly id: string;
   readonly status: OrderStatus | keyof typeof OrderStatus;
   readonly userID: string;
-  readonly Structure: AsyncItem<Structure | undefined>;
   readonly OrderDishes: AsyncCollection<OrderDish>;
-  readonly Courier: AsyncItem<Courier | undefined>;
+  readonly structureID?: string | null;
+  readonly courierID?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-  readonly orderStructureId?: string | null;
-  readonly orderCourierId?: string | null;
 }
 
 export declare type Order = LazyLoading extends LazyLoadingDisabled ? EagerOrder : LazyOrder
@@ -162,6 +164,7 @@ type EagerUser = {
   readonly Baskets?: (Basket | null)[] | null;
   readonly Orders?: (Order | null)[] | null;
   readonly email?: string | null;
+  readonly isActive?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -181,6 +184,7 @@ type LazyUser = {
   readonly Baskets: AsyncCollection<Basket>;
   readonly Orders: AsyncCollection<Order>;
   readonly email?: string | null;
+  readonly isActive?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -354,6 +358,7 @@ type EagerStructure = {
   readonly Dishes?: (Dish | null)[] | null;
   readonly Ingredients?: (Ingredient | null)[] | null;
   readonly Baskets?: (Basket | null)[] | null;
+  readonly Orders?: (Order | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -379,6 +384,7 @@ type LazyStructure = {
   readonly Dishes: AsyncCollection<Dish>;
   readonly Ingredients: AsyncCollection<Ingredient>;
   readonly Baskets: AsyncCollection<Basket>;
+  readonly Orders: AsyncCollection<Order>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

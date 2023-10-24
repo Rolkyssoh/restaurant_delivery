@@ -1,7 +1,7 @@
 import {Dimensions, StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
-  container: {backgroundColor: 'lightblue', height: '100%'},
+  container: {backgroundColor: 'lightblue', flex:1},
   handleIndicator: {backgroundColor: 'grey', width: 100},
   handleIndicatorContainer: {
     flexDirection: 'row',
@@ -17,6 +17,7 @@ export default StyleSheet.create({
   },
   deliveryDetailsContainer: {
     paddingHorizontal: 20,
+    flex:1
   },
   restaurantName: {
     fontSize: 25,
@@ -51,7 +52,6 @@ export default StyleSheet.create({
   containerButton: {
     marginTop: 'auto',
     marginVertical: 20,
-    marginHorizontal: 10,
     borderRadius: 10,
   },
   buttonStyle: {},

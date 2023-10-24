@@ -5,7 +5,7 @@ import {Image} from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {useNavigation} from '@react-navigation/native';
 import {API, graphqlOperation} from 'aws-amplify';
-import {getUser, listUsers} from '../../graphql/queries';
+import {getStructure, getUser, listUsers} from '../../graphql/queries';
 import AWS from 'aws-sdk';
 import {
   REACT_APP_S3_ACCESS_KEY_ID,
@@ -22,14 +22,20 @@ AWS.config.update({
 export const OrderItem = ({order}) => {
   const navigation = useNavigation();
   const [user, setUser] = useState(null);
+  const [structure, setStructure] = useState(null);
   const [structurePicture, setStructurePicture] = useState();
   const s3 = new AWS.S3();
 
   useEffect(() => {
-    if (order.Structure) {
+    getUserByOrderId(order.userID)
+    getStructureByOrderId(order.structureID)
+  }, [order]);
+
+  useEffect(() => {
+    if (structure) {
       const params = {
         Bucket: S3_BUCKET,
-        Key: `${order.Structure.image}`,
+        Key: `${structure.image}`,
       };
       s3.getSignedUrl('getObject', params, (err, data) => {
         if (err) {
@@ -39,13 +45,16 @@ export const OrderItem = ({order}) => {
         }
       });
     }
-
-    getUserByOrderId(order.userID)
-  }, [order]);
+  },[structure])
 
   const getUserByOrderId = (user_id) => {
     API.graphql(graphqlOperation(getUser, {id: user_id})).then(result => {
       setUser(result.data.getUser);
+    });
+  }
+  const getStructureByOrderId = (struct_id) => {
+    API.graphql(graphqlOperation(getStructure, {id: struct_id})).then(result => {
+      setStructure(result.data.getStructure);
     });
   }
 
@@ -59,8 +68,8 @@ export const OrderItem = ({order}) => {
       onPress={() => navigation.navigate('OrderDelivery', {id: order.id})}>
       <Image source={{uri: structurePicture}} style={styles.image} />
       <View style={styles.containerText}>
-        <Text style={styles.name}>{order.Structure.name}</Text>
-        <Text style={styles.textGrey}>{order.Structure.address}</Text>
+        <Text style={styles.name}>{structure?.name}</Text>
+        <Text style={styles.textGrey}>{structure?.address}</Text>
 
         <Text style={{marginTop: 10, color: '#000'}}>Détails du client</Text>
         <Text style={styles.textGrey}>{user?.name}</Text>

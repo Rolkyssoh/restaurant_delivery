@@ -66,7 +66,8 @@ export const OrdersScreen = () => {
   const fetchOrders = () => {
     API.graphql(graphqlOperation(listOrders)).then(result => {
       const readyOrders = result.data.listOrders.items.filter(
-        _ => _.status === 'READY_FOR_PICKUP',
+        // _ =>  !_._deleted,
+        _ => _.status === 'READY_FOR_PICKUP' && !_._deleted,
       );
       setOrders(readyOrders);
     });
@@ -95,7 +96,7 @@ export const OrdersScreen = () => {
         {orders.map(order => (
           <CustomMarker
             key={order.id}
-            data={order.Structure}
+            data={order}
             type="RESTAURANT"
           />
         ))}

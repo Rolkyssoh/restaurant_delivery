@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Auth } from 'aws-amplify';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import { useAuthContext } from '../../contexts/AuthContext';
 
@@ -23,7 +24,8 @@ export const UserAccountScreen = () => {
       <View style={styles.containView}>
         <View>
           <Text style={styles.headTitle}>Compte</Text>
-          <Pressable style={styles.pressableItemStyles}>
+          <Pressable onPress={() => navigation.navigate('Mission')} style={styles.pressableItemStyles}>
+            <MaterialCommunityIcons name="shopping-outline" size={20} color="#000" />
             <Text style={styles.textStyles}>Mes missions</Text>
           </Pressable>
           <Pressable onPress={() => navigation.navigate('Profile') }  style={styles.pressableItemStyles}>

@@ -13,6 +13,7 @@ export const UserAccountScreen = () => {
   const [userName, setUserName] = useState();
 
   useEffect(() => {
+    console.log('the Drivvverr:::', dbCourier)
     if(dbCourier){
       setUserName(dbCourier.name)
     }

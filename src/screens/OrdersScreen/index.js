@@ -5,6 +5,7 @@ import {
   Dimensions,
   ActivityIndicator,
   Pressable,
+  Linking
 } from 'react-native';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import BottomSheet, {BottomSheetFlatList} from '@gorhom/bottom-sheet';
@@ -24,29 +25,23 @@ export const OrdersScreen = () => {
   const bottomSheetRef = useRef(null);
   const navigation = useNavigation();
   const snapPoints = useMemo(() => ['15%', '90%'], []);
+  const [foreground, requestForeground] = Location.useForegroundPermissions();
+  const [background, requestBackground] = Location.useBackgroundPermissions();
 
   const [driverLocation, setDriverLocation] = useState(null);
   const [orders, setOrders] = useState([]);
+  const [reqPositionStatus, setReqPositionStatus] = useState("");
+
+  useEffect(() => {
+    if(reqPositionStatus==="denied")
+      requestedBackPosition()
+  }, [reqPositionStatus]);
 
   useEffect(() => {
     if(!dbCourier){
       navigation.navigate('Profile')
     }
-    (async () => {
-      let {status} = await Location.requestForegroundPermissionsAsync();
-      if (!status === 'granted') {
-        console.warn('Nonono');
-        return;
-      }
-      let location = await Location.getCurrentPositionAsync();
-      setDriverLocation({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      });
-    })();
-  }, []);
-
-  useEffect(() => {
+    requestedPosition();
     fetchOrders();
 
     const subscription = API.graphql(
@@ -62,6 +57,42 @@ export const OrdersScreen = () => {
     });
     return () => subscription.unsubscribe();
   }, []);
+
+  const requestedPosition = async () => {
+      let {status, canAskAgain} = await Location.requestForegroundPermissionsAsync();
+      setReqPositionStatus(status)
+      console.log('the status::::', status)
+      console.log('the can ask again::::', canAskAgain)
+      if(canAskAgain ===false)
+        requestForeground().then(p => {
+          console.log('the ppppp::::', p)
+          !p.granted && Linking.openSettings()
+        })
+      if (!status === 'granted') {
+        console.warn('Nonono');
+        return;
+      }
+      let location = await Location.getCurrentPositionAsync();
+      setDriverLocation({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
+  }
+
+  const requestedBackPosition = async () => {
+      let {status} = await Location.requestBackgroundPermissionsAsync()
+      setReqPositionStatus(status)
+      console.log('the status::::', status)
+      if (!status === 'granted') {
+        console.warn('Nonono');
+        return;
+      }
+      let location = await Location.getCurrentPositionAsync();
+      setDriverLocation({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
+  }
 
   const fetchOrders = () => {
     API.graphql(graphqlOperation(listOrders)).then(result => {

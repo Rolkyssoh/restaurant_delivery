@@ -29,7 +29,7 @@ const OrderContextProvider = ({children}) => {
   const fetchOrders = async () => {
     API.graphql(graphqlOperation(listOrders)).then((o) => {
       console.log('the all ordersss::::', o.data.listOrders.items.filter(_ => _.status ==="COMPLETED" && _.Courier !=null));
-      setCourierHisOrders( o.data.listOrders.items.filter(_ => _.status ==="COMPLETED"))
+      setCourierHisOrders( o.data.listOrders.items.filter(_ => _.status ==="COMPLETED" && !_._deleted))
     })
   }
 

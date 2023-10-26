@@ -56,6 +56,24 @@ export const listCouriers = /* GraphQL */ `
         tranportationMode
         email
         Orders {
+          items {
+            id
+            status
+            userID
+            OrderDishes {
+              nextToken
+              startedAt
+              __typename
+            }
+            structureID
+            courierID
+            createdAt
+            updatedAt
+            _version
+            _deleted
+            _lastChangedAt
+            __typename
+          }
           nextToken
           startedAt
           __typename

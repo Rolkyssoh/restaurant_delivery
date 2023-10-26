@@ -26,16 +26,9 @@ export const OrdersScreen = () => {
   const navigation = useNavigation();
   const snapPoints = useMemo(() => ['15%', '90%'], []);
   const [foreground, requestForeground] = Location.useForegroundPermissions();
-  const [background, requestBackground] = Location.useBackgroundPermissions();
 
   const [driverLocation, setDriverLocation] = useState(null);
   const [orders, setOrders] = useState([]);
-  const [reqPositionStatus, setReqPositionStatus] = useState("");
-
-  useEffect(() => {
-    if(reqPositionStatus==="denied")
-      requestedBackPosition()
-  }, [reqPositionStatus]);
 
   useEffect(() => {
     if(!dbCourier){
@@ -60,29 +53,10 @@ export const OrdersScreen = () => {
 
   const requestedPosition = async () => {
       let {status, canAskAgain} = await Location.requestForegroundPermissionsAsync();
-      setReqPositionStatus(status)
-      console.log('the status::::', status)
-      console.log('the can ask again::::', canAskAgain)
       if(canAskAgain ===false)
         requestForeground().then(p => {
-          console.log('the ppppp::::', p)
           !p.granted && Linking.openSettings()
         })
-      if (!status === 'granted') {
-        console.warn('Nonono');
-        return;
-      }
-      let location = await Location.getCurrentPositionAsync();
-      setDriverLocation({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      });
-  }
-
-  const requestedBackPosition = async () => {
-      let {status} = await Location.requestBackgroundPermissionsAsync()
-      setReqPositionStatus(status)
-      console.log('the status::::', status)
       if (!status === 'granted') {
         console.warn('Nonono');
         return;
@@ -109,8 +83,6 @@ export const OrdersScreen = () => {
     console.log(driverLocation)
     return <ActivityIndicator size={'large'} color="#000" />;
   }
-  console.log({orders});
-  console.log({driverLocation});
 
   return (
     <View style={{backgroundColor: 'lightgrey', height: '100%'}}>

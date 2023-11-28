@@ -13,7 +13,7 @@ import {API, graphqlOperation} from 'aws-amplify';
 import {useAuthContext} from '../../contexts/AuthContext';
 import {updateCourier} from '../../graphql/mutations';
 
-import {GOOGLE_MAPS_APIKEY} from '@env';
+import Config from 'react-native-config'
 import { getStructure } from '../../graphql/queries';
 import { OrderStatus } from '../../models';
 
@@ -136,7 +136,7 @@ export const OrderDelivery = () => {
           waypoints={
             order.status === 'READY_FOR_PICKUP' ? [restaurantLocation] : []
           }
-          apikey={GOOGLE_MAPS_APIKEY}
+          apikey={Config.GOOGLE_MAPS_APIKEY}
           onReady={result => {
             setTotalMinutes(result.duration);
             setTotalKm(result.distance);

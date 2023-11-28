@@ -7,16 +7,11 @@ import {useNavigation} from '@react-navigation/native';
 import {API, graphqlOperation} from 'aws-amplify';
 import {getStructure, getUser, listUsers} from '../../graphql/queries';
 import AWS from 'aws-sdk';
-import {
-  REACT_APP_S3_ACCESS_KEY_ID,
-  REACT_APP_S3_SECRET_ACCESS_KEY,
-  S3_BUCKET,
-  REGION,
-} from '@env';
+import Config from 'react-native-config'
 
 AWS.config.update({
-  accessKeyId: REACT_APP_S3_ACCESS_KEY_ID,
-  secretAccessKey: REACT_APP_S3_SECRET_ACCESS_KEY,
+  accessKeyId: Config.REACT_APP_S3_ACCESS_KEY_ID,
+  secretAccessKey: Config.REACT_APP_S3_SECRET_ACCESS_KEY,
 });
 
 export const OrderItem = ({order}) => {
@@ -34,7 +29,7 @@ export const OrderItem = ({order}) => {
   useEffect(() => {
     if (structure) {
       const params = {
-        Bucket: S3_BUCKET,
+        Bucket: Config.S3_BUCKET,
         Key: `${structure.image}`,
       };
       s3.getSignedUrl('getObject', params, (err, data) => {

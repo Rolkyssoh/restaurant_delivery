@@ -6,16 +6,11 @@ import { getStructure } from '../../graphql/queries';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import AWS from 'aws-sdk';
-import {
-  REACT_APP_S3_ACCESS_KEY_ID,
-  REACT_APP_S3_SECRET_ACCESS_KEY,
-  S3_BUCKET,
-  REGION,
-} from '@env';
+import Config from 'react-native-config'
 
 AWS.config.update({
-  accessKeyId: REACT_APP_S3_ACCESS_KEY_ID,
-  secretAccessKey: REACT_APP_S3_SECRET_ACCESS_KEY,
+  accessKeyId: Config.REACT_APP_S3_ACCESS_KEY_ID,
+  secretAccessKey: Config.REACT_APP_S3_SECRET_ACCESS_KEY,
 });
 
 dayjs.extend(relativeTime);
@@ -33,7 +28,7 @@ export const MissionItem = ({mission}) => {
     useEffect(() => {
         if (structure) {
           const params = {
-            Bucket: S3_BUCKET,
+            Bucket: Config.S3_BUCKET,
             Key: `${structure.image}`,
           };
           s3.getSignedUrl('getObject', params, (err, data) => {
